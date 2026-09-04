@@ -22,11 +22,10 @@ application:
         - /*
       do:
         - src: file:///lzcapp/pkg/content/lazycat-injects/lzc-file-chooser-inject.js
-
 services:
   app:
     # upstream: docker.io/projectsend/projectsend:2.3.0
-    image: docker.1ms.run/projectsend/projectsend@sha256:28526a14a565227d347b511241d1eea3ff1fc803b1a89e6e72c6ee132bf45b9e
+    image: docker.1ms.run/projectsend/projectsend:2.3.0
     command: /bin/sh /lzcapp/pkg/content/start-app.sh
     depends_on:
       - db
@@ -54,7 +53,6 @@ services:
       - ADMIN_PASSWORD_B64={{ .U.admin_password | b64enc }}
     binds:
       - /lzcapp/var/projectsend/storage:/var/www/html/storage
-
   db:
     # upstream: docker.io/library/mysql:8.4
     image: docker.1ms.run/library/mysql@sha256:1d6b6a8fcee8ff758ff151d017f5203cd06792a0e698f0a593c9dfcb14609cf0
@@ -76,12 +74,10 @@ services:
       interval: 5s
       timeout: 5s
       retries: 20
-
   redis:
     # upstream: docker.io/library/redis:7-alpine
     image: docker.1ms.run/library/redis@sha256:1db42ccef14898aa29bae778452d567534b59c107129cbc1163fb552de184d3c
     binds:
       - /lzcapp/var/projectsend/redis:/data
-
 usage: |
   Sign in at /login with the administrator email and password configured during installation. Uploaded files and the generated Laravel APP_KEY persist in application storage. Configure SMTP after signing in under System → Settings → Email. Public share links are reachable without LazyCat authentication and remain protected by ProjectSend.
