@@ -27,6 +27,7 @@ services:
   app:
     # upstream: docker.io/projectsend/projectsend:2.3.0
     image: docker.1ms.run/projectsend/projectsend@sha256:28526a14a565227d347b511241d1eea3ff1fc803b1a89e6e72c6ee132bf45b9e
+    command: /bin/sh /lzcapp/pkg/content/start-app.sh
     depends_on:
       - db
       - redis
@@ -48,9 +49,9 @@ services:
       - MAIL_MAILER=log
       - MAIL_FROM_ADDRESS=noreply@{{ .S.AppDomain }}
       - TRUSTED_PROXIES=*
-      - ADMIN_NAME={{ .U.admin_name }}
-      - ADMIN_EMAIL={{ .U.admin_email }}
-      - ADMIN_PASSWORD={{ .U.admin_password }}
+      - ADMIN_NAME_B64={{ .U.admin_name | b64enc }}
+      - ADMIN_EMAIL_B64={{ .U.admin_email | b64enc }}
+      - ADMIN_PASSWORD_B64={{ .U.admin_password | b64enc }}
     binds:
       - /lzcapp/var/projectsend/storage:/var/www/html/storage
 

@@ -7,7 +7,8 @@ LazyCat LPK v2 packaging for [ProjectSend](https://github.com/projectsend/projec
 - Single ProjectSend `2.3.0` instance with MySQL 8.4 and Redis 7.
 - HTTP is terminated by LazyCat and forwarded to the official ProjectSend image on port 80; no external nginx or certbot service is packaged.
 - Public share links and the login page are reachable without LazyCat authentication and use ProjectSend's own access controls.
-- The initial administrator is created from setup-wizard parameters and the `/login` form is autofilled.
+- The initial administrator is created from setup-wizard parameters and the `/login` form is autofilled. Administrator parameters only affect first boot; later account changes must be made inside ProjectSend.
+- The official image entrypoint still owns migration and readiness behavior, including its built-in 60-second database wait.
 - Uploads, the generated Laravel `APP_KEY`, MySQL, and Redis data persist under `/lzcapp/var/projectsend`.
 - Upload and download flows include the LazyCat file-picker injection.
 
