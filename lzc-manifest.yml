@@ -55,7 +55,7 @@ services:
       - /lzcapp/var/projectsend/storage:/var/www/html/storage
   db:
     # upstream: docker.io/library/mysql:8.4
-    image: docker.1ms.run/library/mysql@sha256:1d6b6a8fcee8ff758ff151d017f5203cd06792a0e698f0a593c9dfcb14609cf0
+    image: docker.1ms.run/library/mysql:8.4.11
     environment:
       - MYSQL_DATABASE=projectsend
       - MYSQL_USER=projectsend
@@ -76,7 +76,7 @@ services:
       retries: 20
   redis:
     # upstream: docker.io/library/redis:7-alpine
-    image: docker.1ms.run/library/redis@sha256:1db42ccef14898aa29bae778452d567534b59c107129cbc1163fb552de184d3c
+    image: docker.1ms.run/library/redis:7.4.11-alpine
     binds:
       - /lzcapp/var/projectsend/redis:/data
 usage: |
