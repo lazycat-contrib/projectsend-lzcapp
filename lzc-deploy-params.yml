@@ -1,0 +1,42 @@
+params:
+  - id: admin_name
+    type: string
+    name: Administrator Name
+    description: Display name for the initial ProjectSend administrator
+    default_value: Administrator
+    optional: false
+
+  - id: admin_email
+    type: string
+    name: Administrator Email
+    description: Email address used to sign in as the initial administrator
+    optional: false
+
+  - id: admin_password
+    type: secret
+    name: Administrator Password
+    description: Password for the initial administrator; changing this value after first installation does not reset the existing account
+    default_value: "$random(len=24)"
+    optional: false
+
+locales:
+  zh:
+    admin_name:
+      name: 管理员名称
+      description: ProjectSend 初始管理员的显示名称
+    admin_email:
+      name: 管理员邮箱
+      description: 初始管理员登录使用的邮箱地址
+    admin_password:
+      name: 管理员密码
+      description: 初始管理员密码；首次安装后修改此参数不会重置已有账号密码
+  en:
+    admin_name:
+      name: Administrator Name
+      description: Display name for the initial ProjectSend administrator
+    admin_email:
+      name: Administrator Email
+      description: Email address used by the initial administrator
+    admin_password:
+      name: Administrator Password
+      description: Initial administrator password; changing this after installation does not reset an existing account

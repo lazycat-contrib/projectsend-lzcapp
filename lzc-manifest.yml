@@ -1,0 +1,86 @@
+application:
+  subdomain: projectsend
+  multi_instance: false
+  upstreams:
+    - location: /
+      backend: http://app:80/
+  public_path:
+    - /
+  injects:
+    - id: projectsend-login
+      on: browser
+      when:
+        - /login
+      do:
+        - src: builtin://simple-inject-password
+          params:
+            user: "{{ .U.admin_email }}"
+            password: "{{ .U.admin_password }}"
+    - id: open-save-chooser
+      on: browser
+      when:
+        - /*
+      do:
+        - src: file:///lzcapp/pkg/content/lazycat-injects/lzc-file-chooser-inject.js
+
+services:
+  app:
+    # upstream: docker.io/projectsend/projectsend:2.3.0
+    image: docker.1ms.run/projectsend/projectsend@sha256:28526a14a565227d347b511241d1eea3ff1fc803b1a89e6e72c6ee132bf45b9e
+    depends_on:
+      - db
+      - redis
+    environment:
+      - APP_URL=https://{{ .S.AppDomain }}
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - PROJECTSEND_EDITION=community
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=projectsend
+      - DB_USERNAME=projectsend
+      - DB_PASSWORD={{ stable_secret "database_password" }}
+      - REDIS_HOST=redis
+      - CACHE_STORE=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+      - MAIL_MAILER=log
+      - MAIL_FROM_ADDRESS=noreply@{{ .S.AppDomain }}
+      - TRUSTED_PROXIES=*
+      - ADMIN_NAME={{ .U.admin_name }}
+      - ADMIN_EMAIL={{ .U.admin_email }}
+      - ADMIN_PASSWORD={{ .U.admin_password }}
+    binds:
+      - /lzcapp/var/projectsend/storage:/var/www/html/storage
+
+  db:
+    # upstream: docker.io/library/mysql:8.4
+    image: docker.1ms.run/library/mysql@sha256:1d6b6a8fcee8ff758ff151d017f5203cd06792a0e698f0a593c9dfcb14609cf0
+    environment:
+      - MYSQL_DATABASE=projectsend
+      - MYSQL_USER=projectsend
+      - MYSQL_PASSWORD={{ stable_secret "database_password" }}
+      - MYSQL_ROOT_PASSWORD={{ stable_secret "mysql_root_password" }}
+    binds:
+      - /lzcapp/var/projectsend/mysql:/var/lib/mysql
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - -h
+        - 127.0.0.1
+        - --silent
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    # upstream: docker.io/library/redis:7-alpine
+    image: docker.1ms.run/library/redis@sha256:1db42ccef14898aa29bae778452d567534b59c107129cbc1163fb552de184d3c
+    binds:
+      - /lzcapp/var/projectsend/redis:/data
+
+usage: |
+  Sign in at /login with the administrator email and password configured during installation. Uploaded files and the generated Laravel APP_KEY persist in application storage. Configure SMTP after signing in under System → Settings → Email. Public share links are reachable without LazyCat authentication and remain protected by ProjectSend.
