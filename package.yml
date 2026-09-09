@@ -1,5 +1,5 @@
 package: community.lazycat.app.projectsend
-version: 2.3.0
+version: 2.4.0
 name: ProjectSend
 description: ProjectSend is a free, open source software that lets you share files with your clients, focused on ease of use and privacy. It supports clients groups, system users roles, statistics, multiple languages, detailed logs... and much more!
 min_os_version: 1.5.0
