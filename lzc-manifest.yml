@@ -24,8 +24,8 @@ application:
         - src: file:///lzcapp/pkg/content/lazycat-injects/lzc-file-chooser-inject.js
 services:
   app:
-    # upstream: docker.io/projectsend/projectsend:2.4.0
-    image: docker.1ms.run/projectsend/projectsend:2.4.0
+    # upstream: docker.io/projectsend/projectsend:2.4.1
+    image: docker.1ms.run/projectsend/projectsend:2.4.1
     command: /bin/sh /lzcapp/pkg/content/start-app.sh
     depends_on:
       - db
